@@ -232,4 +232,27 @@ e.printStackTrace();
         return ProductList;
     }
     
+    public List<product> fillter(String search) {
+        List<product> ProductList = new ArrayList<>();
+        String sql = "SELECT * FROM `products` WHERE CONCAT(name,price,detail,type) LIKE'%"+search+"%'";
+        try {
+            PreparedStatement ps = connect.prepareStatement(sql);
+            ResultSet result = ps.executeQuery();
+            while (result.next()) {
+                product p = new product();
+                p.SetID(result.getString("id"));
+                p.Setname(result.getNString("name"));
+                p.SetPrice((int) result.getFloat("price"));
+                p.SetDescription(result.getString("detail"));
+                p.Setadd_date(result.getString("add_date"));
+                p.SetType(result.getString("type"));
+                p.SetImage(result.getBytes("image"));
+                ProductList.add(p);
+            }
+            connect.close();
+        } catch (Exception e) {
+        }
+        return ProductList;
+    }
+    
 }

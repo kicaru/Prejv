@@ -6,11 +6,14 @@
 package MVC.view;
 
 import MVC.Data_Access_Object.ConnectDB;
+import MVC.Data_Access_Object.Themodel;
 import MVC.model.product;
 import appjava.LOGOUT;
 import appjava.OrderList;
+import java.awt.Image;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import login_regis.JFramelogin;
@@ -28,6 +31,8 @@ public class Main_Search extends javax.swing.JFrame implements Runnable{
      */
     public Main_Search() {
        initComponents();
+       Thread t1 = new Thread(this);
+        t1.start();
     }
     
     public Main_Search(String id,String search){
@@ -43,7 +48,8 @@ public class Main_Search extends javax.swing.JFrame implements Runnable{
             txt_id.setText(id);
             txt_result.setText(search);
         }
-        
+        Thread t1 = new Thread(this);
+        t1.start();
     }
 
     /**
@@ -115,13 +121,13 @@ public class Main_Search extends javax.swing.JFrame implements Runnable{
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {},
+                {},
+                {},
+                {}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+
             }
         ));
         jScrollPane1.setViewportView(jTable1);
@@ -131,13 +137,12 @@ public class Main_Search extends javax.swing.JFrame implements Runnable{
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 499, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(txt_result, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(22, Short.MAX_VALUE))
+                .addGap(10, 10, 10)
+                .addComponent(txt_result, javax.swing.GroupLayout.PREFERRED_SIZE, 509, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(jScrollPane1)
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -155,25 +160,21 @@ public class Main_Search extends javax.swing.JFrame implements Runnable{
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(txt_search, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txt_id, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(43, 43, 43))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(10, 10, 10)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(txt_search, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txt_id, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(10, 10, 10)
-                                .addComponent(btn_search)
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btn_logout)
-                                .addGap(32, 32, 32))))))
+                        .addComponent(btn_search)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btn_logout)
+                        .addGap(32, 32, 32))))
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -285,24 +286,22 @@ public class Main_Search extends javax.swing.JFrame implements Runnable{
     public void run() {
         boolean check=false;
         ConnectDB dao = new ConnectDB();
-        List<product> pList = pList=dao.fildALL();
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        model.setNumRows(0);
-        Object[] row = new Object[4];
+        List<product> pList = dao.fillter(search);
+        String [] ColumnName = {"Name","Price","Detail","Image"};
+        Object[][] row = new Object[pList.size()][4];
         for (int i = 0; i < pList.size(); i++) {
-            if(search.equals(pList.get(i).GetName()) || search.equals(pList.get(i).GetType())){
-        check=true;
-            row[0] = pList.get(i).GetName();
-            row[1] = pList.get(i).GetPrice();
-            row[2] = pList.get(i).GetDescription();
-            row[3] = pList.get(i).GetImage();
-            model.addRow(row);
-            }
+           
+            row[i][0] = pList.get(i).GetName();
+            row[i][1] = pList.get(i).GetPrice();
+            row[i][2] = pList.get(i).GetDescription();
+           ImageIcon image = new ImageIcon(new ImageIcon(pList.get(i).GetImage()).getImage().getScaledInstance(150, 120, Image.SCALE_SMOOTH));
+            row[i][3] = image;
         }
-        if(!check){
-            JOptionPane.showMessageDialog(null, "No result!!!");
-        }
-    }
+         Themodel model = new Themodel(row,ColumnName);
+        jTable1.setModel(model);
+        jTable1.setRowHeight(120);
+        jTable1.getColumnModel().getColumn(3).setPreferredWidth(150);
+           }
 
    
     
