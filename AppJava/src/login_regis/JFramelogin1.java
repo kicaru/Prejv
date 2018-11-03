@@ -164,8 +164,8 @@ public class JFramelogin1 extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         ConnectDBMembers dao = new ConnectDBMembers();
         List<Members> mList = dao.findlog_in();
-        String id = txt_id.getText();
-        String pwd = txt_pwd.getText();
+        String id = txt_id.getText().toUpperCase();
+        String pwd = txt_pwd.getText().toUpperCase();
         for(int i = 0;i<mList.size();i++){
             if(id.equals(mList.get(i).GetID()) && pwd.equals(mList.get(i).GetPwd())){
                 if(mList.get(i).GetType().equals("member"))
